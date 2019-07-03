@@ -1,0 +1,64 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///     ASYNC AWAIT EXAMPLE
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+	//FUCNTION TO GET BUCKETS
+	getbuckets(milliseconds) { // MILIISECONDS VARIABLE USED TO DELAY THE VARIABLE ASSIGNING( REST API RESPONSE TAKES 2-3 SECONDS DELAY )
+		(async () => { // ASYNC-AWAIT USED TO HANDLE API RESPONSE DELAY
+			// Do something before delay
+			console.log('before delay')
+			this.s3service.getbuckets();
+
+			await this.delay(milliseconds); // WAIT FOR SOME MILLISECONDS AFTER THE GET CALL IS SENT
+
+			// Do something after
+			console.log('after delay')
+			// AFTER THE DELAY AS THERE IS NO CONFLICT. ASSIGN THE VARIABLE VALUES.
+			this.bucketlist = this.s3service.bucketlist;
+			this.bucketcount = this.s3service.bucketlist.length;
+		})();
+
+
+
+	}
+
+	//ACTUAL FUCNTION TO CAUSE DELAY
+	delay(ms: number) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///     JSON STRINGIFY EXAMPLE
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+this.s3service.postData({ "bucket_name": bucketarray[i] }).subscribe((result) => { // SEND DATA TO THE S3 POST CALL FUNCTION
+
+					console.log(result);
+				}, (error) => {
+					console.log(error);
+				});
+
+ postData(data: any) {
+        let options = this.createRequestOptions();
+
+        return this.http.post(`https://2f7wrz7c6b.execute-api.ap-south-1.amazonaws.com/dev/s3/buckets`, JSON.stringify(data),
+            {
+                headers: options
+            });
+    }
+    
+     // Common function used to create the HTTP headers options
+    private createRequestOptions() {
+        let headers = new HttpHeaders({
+            "Content-Type": "application/json"
+        });
+        return headers;
+    }
